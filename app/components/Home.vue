@@ -9,7 +9,9 @@
         {{ message }}
       </Label>
       <Label height="90%" backgroundColor="#ff9900">
-        <MapView @ready="onMapReady" />
+        <MapView
+          @ready="onMapReady"
+        />
       </Label>
     </FlexboxLayout>
   </Page>
@@ -19,27 +21,26 @@
 import Vue from 'nativescript-vue';
 import { CoreTypes } from '@nativescript/core';
 import * as geolocation from '@nativescript/geolocation';
+import { GoogleMap, MapReadyEvent } from '@nativescript/google-maps';
 
-import { MapView } from '@nativescript/google-maps/vue';
+interface DataStructure {
+  latitude: number | null;
+  longitude: number | null;
+}
 
 export default Vue.extend({
-  data() {
+  data(): DataStructure {
     return {
-      hasLocation: false,
-
       latitude: null,
       longitude: null,
     };
-  },
-  components: {
-    MapView,
   },
   computed: {
     message() {
       if (!this.latitude || !this.longitude) {
         return 'Waiting geolocation...';
       } else {
-        return `Location: { ${this.latitude}, ${this.longitude}}`;
+        return `Location: { ${this.latitude}, ${this.longitude}} !`;
       }
     },
   },
