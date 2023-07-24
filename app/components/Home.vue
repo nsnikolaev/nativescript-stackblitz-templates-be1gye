@@ -4,27 +4,35 @@
       <Label text="Home" class="font-bold text-lg" />
     </ActionBar>
 
-    <GridLayout>
-      <Label
-        class="text-xl align-middle text-center text-gray-500"
-        :text="message"
-      />
-    </GridLayout>
+    <FlexboxLayout flexDirection="column">
+      <Label>
+        {{ message }}
+      </Label>
+      <Label height="90%" backgroundColor="#ff9900">
+        <MapView @ready="onMapReady" />
+      </Label>
+    </FlexboxLayout>
   </Page>
 </template>
 
 <script lang="ts">
 import Vue from 'nativescript-vue';
-
-import * as geolocation from '@nativescript/geolocation';
 import { CoreTypes } from '@nativescript/core';
+import * as geolocation from '@nativescript/geolocation';
+
+import { MapView } from '@nativescript/google-maps/vue';
 
 export default Vue.extend({
   data() {
     return {
+      hasLocation: false,
+
       latitude: null,
       longitude: null,
     };
+  },
+  components: {
+    MapView,
   },
   computed: {
     message() {
@@ -35,7 +43,12 @@ export default Vue.extend({
       }
     },
   },
-  methods: {},
+  methods: {
+    onMapReady(event: MapReadyEvent) {
+      const map: GoogleMap = event.map;
+      console.log('Map is ready!', map);
+    },
+  },
   async mounted() {
     await geolocation.enableLocationRequest();
     geolocation
